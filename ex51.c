@@ -4,7 +4,6 @@
 
 #include <stdio.h>
 #include <termios.h>
-#include <bits/signum.h>
 #include <signal.h>
 #include <unistd.h>
 
