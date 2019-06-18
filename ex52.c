@@ -7,15 +7,17 @@
 #include <signal.h>
 #include <stdlib.h>
 #define GRID_SIZE 20
-#define HORIZANTAL 0
+#define HORIZONTAL 0
 #define VERTICAL 1
 #define FLIP 'w'
 #define LEFT 'a'
 #define RIGHT 'd'
 #define DOWN 's'
 #define QUIT 'q'
-#define SIGN '*'
+#define BORDER '*'
+#define SHAPE '-'
 #define SPACE ' '
+
 typedef struct tetris_game_board {
     char grid[GRID_SIZE][GRID_SIZE];
     int row;
@@ -119,7 +121,7 @@ void ChangePosition(TetriStruct *tetris) {
     ClearShape(tetris);
     int prevRow = tetris->row;
     int prevCol = tetris->col;
-    if (tetris->position == HORIZANTAL) {
+    if (tetris->position == HORIZONTAL) {
         tetris->position = VERTICAL;
         PlaceShape(tetris, prevRow - 1, prevCol + 1, 1);
     } else  {
@@ -131,7 +133,7 @@ void ChangePosition(TetriStruct *tetris) {
         } else if (y < 1) {
             y = 1;
         }
-        tetris->position = HORIZANTAL;
+        tetris->position = HORIZONTAL;
         PlaceShape(tetris, x, y, 1);
     }
 }
@@ -145,7 +147,7 @@ void CreateGrid(TetriStruct* tetris) {
     for (i = 0; i < 20 - 1; i++) {
         for (j = 0; j < 20; j++) {
             if (j == 0 || j == 20 - 1) {
-                tetris->grid[i][j] = SIGN;
+                tetris->grid[i][j] = BORDER;
                 continue;
             }
             // Fill the rest with ' ' .
@@ -153,7 +155,7 @@ void CreateGrid(TetriStruct* tetris) {
         }
     }
     for (j = 0; j < 20; j++) {
-        tetris->grid[20 - 1][j] = SIGN;
+        tetris->grid[20 - 1][j] = BORDER;
     }
 }
 
@@ -178,7 +180,7 @@ void ShowGrid(TetriStruct* tetris) {
  * @param tetris
  */
 void ClearShape(TetriStruct* tetris) {
-    if (tetris->position == HORIZANTAL) {
+    if (tetris->position == HORIZONTAL) {
         tetris->grid[tetris->row][tetris->col] = SPACE;
         tetris->grid[tetris->row][tetris->col + 1] = SPACE;
         tetris->grid[tetris->row][tetris->col + 2] = SPACE;
@@ -198,7 +200,7 @@ void ClearShape(TetriStruct* tetris) {
  */
 void PlaceShape(TetriStruct* tetris, int row, int col, int isChanged) {
 
-    if (tetris->position == HORIZANTAL) {
+    if (tetris->position == HORIZONTAL) {
         if (col <= 0)
             return;
         if (col + 2 >= 20 -1 )
@@ -216,18 +218,18 @@ void PlaceShape(TetriStruct* tetris, int row, int col, int isChanged) {
     tetris->row = row;
     tetris->col = col;
 
-    if (tetris->position == HORIZANTAL) {
-        tetris->grid[row][col] = SPACE;
-        tetris->grid[row][col + 1] = SPACE;
-        tetris->grid[row][col + 2] = SPACE;
+    if (tetris->position == HORIZONTAL) {
+        tetris->grid[row][col] = SHAPE;
+        tetris->grid[row][col + 1] = SHAPE;
+        tetris->grid[row][col + 2] = SHAPE;
         // Once we hit the bottom, re-initialize
         if (row >= 20 - 1) {
             InitializeGame(tetris);
         }
     } else {
-        tetris->grid[row][col] = SPACE;
-        tetris->grid[row + 1][col] = SPACE;
-        tetris->grid[row + 2][col] = SPACE;
+        tetris->grid[row][col] = SHAPE;
+        tetris->grid[row + 1][col] = SHAPE;
+        tetris->grid[row + 2][col] = SHAPE;
         // Once we hit the bottom, re-initialize
         if (row + 2 >= 20 - 1) {
             InitializeGame(tetris);
